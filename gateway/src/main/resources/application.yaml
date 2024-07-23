@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: gateway
+server:
+  port: ${SERVER_PORT}
+  servlet:
+    context-path: /api
+
+gateway:
+  secret: ${SECRET}
+
+grpc:
+  client:
+    backend:
+      address: ${GRPC_BACKEND_URL}:${GRPC_BACKEND_PORT}
+      negotiation-type: plaintext
+    auth:
+      address: ${GRPC_AUTH_URL}:${GRPC_AUTH_PORT}
+      negotiation-type: plaintext

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package ru.base.grpc.common;
+
+message JwtToken {
+  string jwtToken = 1;
+}
+
+message Id {
+    int64 id= 1;
+}
+
+message Password {
+  string password = 1;
+}
+
+message Username {
+  string username = 1;
+}
+
+message Email {
+  string email = 1;
+}
+

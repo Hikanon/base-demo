@@ -1,0 +1,10 @@
+syntax = "proto3";
+package ru.base.grpc.auth;
+
+import "AuthMessage.proto";
+import "CommonMessage.proto";
+
+service AuthService {
+  rpc signIn(SignInRequest) returns (ru.base.grpc.common.JwtToken);
+  rpc signUp(SignUpRequest) returns (ru.base.grpc.common.JwtToken);
+}

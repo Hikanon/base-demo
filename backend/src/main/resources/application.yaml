@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: backend
+server:
+  port: ${SERVER_PORT}
+
+backend:
+  secret: ${SECRET}
+grpc:
+  server:
+    port: ${GRPC_PORT}

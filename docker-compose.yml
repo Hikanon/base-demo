@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  authentication:
+    build: ./authentication
+    container_name: "authentication"
+    networks:
+      - base-demo-network
+    ports:
+      - "8082:8082" # Для сервера
+      - "9092:9092" # Для gRPC
+  backend:
+    build: ./backend
+    container_name: "backend"
+    networks:
+      - base-demo-network
+    ports:
+      - "8081:8081" # Для сервера
+      - "9091:9091" # Для gRPC
+    environment:
+      SECRET: default-secret
+      SERVER_PORT: 8080
+      GRPC_PORT: 9090
+  database:
+    build: ./database
+    container_name: "database"
+    networks:
+      - base-demo-network
+    ports:
+      - "8083:8083" # Для сервера
+      - "9093:9093" # Для gRPC
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres_db:5432/base_demo
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+  gateway:
+    build: ./gateway
+    container_name: "gateway"
+    networks:
+      - base-demo-network
+    ports:
+      - "8080:8080" # Для сервера
+    environment:
+      GRPC_SERVER_URL: http://backend
+      GRPC_SERVER_PORT: 9090
+      SECRET: default-secret
+  postgres_db:
+    image: postgres:latest
+    container_name: "postgres_db"
+    networks:
+      - base-demo-network
+    environment:
+      POSTGRES_DB: base_demo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+networks:
+  base-demo-network:
+    name: "base-demo-network"
+    driver: bridge

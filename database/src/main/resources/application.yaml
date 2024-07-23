@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: database
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    default-schema: base_demo
+
+server:
+  port: ${SERVER_PORT}
+
+grpc:
+  server:
+    port: ${GRPC_PORT}

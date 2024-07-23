@@ -1,0 +1,16 @@
+syntax = "proto3";
+package ru.base.grpc.user;
+
+import "CommonMessage.proto";
+
+message UserData {
+  ru.base.grpc.common.Username username = 1;
+  string role = 2;
+  ru.base.grpc.common.Email email = 3;
+}
+
+message FullUserData {
+  ru.base.grpc.common.Id id = 1;
+  ru.base.grpc.common.Password password = 2;
+  UserData userData = 3;
+}

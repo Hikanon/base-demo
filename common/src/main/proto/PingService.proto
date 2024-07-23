@@ -1,0 +1,8 @@
+syntax = "proto3";
+package ru.base.grpc.ping;
+
+import "PingMessage.proto";
+
+service PingService {
+  rpc ping(PingRequest) returns (PingResponse);
+}
