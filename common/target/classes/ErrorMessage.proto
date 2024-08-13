@@ -1,8 +1,0 @@
-syntax = "proto3";
-package ru.base.grpc.error;
-
-enum ErrorCode {
-  NOT_FOUND = 0;
-  USERNAME_EXISTS = 1;
-  EMAIL_EXISTS = 2;
-}

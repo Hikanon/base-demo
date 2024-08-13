@@ -1,8 +1,0 @@
-syntax = "proto3";
-package ru.base.grpc.ping;
-
-message PingRequest {}
-
-message PingResponse {
-  bool serviceActive = 1;
-}
