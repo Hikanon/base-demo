@@ -1,6 +1,5 @@
 package ru.base.gateway.controller.auth;
 
-import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +12,7 @@ import ru.base.gateway.service.AuthServiceImpl;
 
 /**
  * Контроллер для авторизации/регистрации пользователя
+ *
  * @author Makhanov
  */
 @RestController
@@ -28,21 +28,23 @@ public class AuthController {
 
     /**
      * Авторизация пользователя
+     *
      * @param signInData данные для авторизации пользователя
      * @return токен авторизации пользователя
      */
     @PostMapping("/signIn")
-    public JwtTokenResponse signIn(@Valid @RequestBody SignInData signInData) {
+    public JwtTokenResponse signIn(@Validated @RequestBody SignInData signInData) {
         return authService.signIn(signInData);
     }
 
     /**
      * Регистрация нового пользователя
+     *
      * @param signUpData данные для регистрации пользователя
      * @return токен авторизации пользователя
      */
     @PostMapping("/signUp")
-    public JwtTokenResponse signUp(@Valid @RequestBody SignUpData signUpData) {
+    public JwtTokenResponse signUp(@Validated @RequestBody SignUpData signUpData) {
         return authService.signUp(signUpData);
     }
 

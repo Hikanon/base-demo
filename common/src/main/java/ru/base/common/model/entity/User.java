@@ -26,11 +26,10 @@ import ru.base.common.enumeration.Role;
 @Data
 @Entity
 @Table(schema = "base_demo", name = "user")
-public class User extends BaseModel implements Serializable, UserDetails {
+public class User extends BaseModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 6302886665566842619L;
-
 
     /**
      *  Идентификатор записи
@@ -47,51 +46,15 @@ public class User extends BaseModel implements Serializable, UserDetails {
     private String username;
 
     /**
-     * Пароль приходит сразу хэшированный
-     */
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    /**
      * Почта пользователя
      */
     @Column(name = "email", nullable = false)
     private String email;
 
-    /**
-     * Роль пользователя
-     * Если при создании нового пользователя отсутствует роль, то автоматически ставиться ROLE_USER
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role = Role.ROLE_USER;
+    private Boolean expired;
 
-    public User() {
-    }
+    private Boolean locked;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    private Boolean enabled;
 
 }
