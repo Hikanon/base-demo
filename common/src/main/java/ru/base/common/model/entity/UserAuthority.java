@@ -1,25 +1,37 @@
 package ru.base.common.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
-@Table(schema = "base_demo", name = "user_authority")
+@Table(name = "user_authority", schema = "base_demo")
 public class UserAuthority extends BaseModel implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -5267561729725544400L;
+    private static final long serialVersionUID = 3709447078581077120L;
 
-    /**
-     *  Идентификатор записи
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_authority", nullable = false)
+    private Authority authority;
+
 }

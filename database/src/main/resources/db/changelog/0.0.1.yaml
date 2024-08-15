@@ -1,43 +1,170 @@
 databaseChangeLog:
+  - preConditions:
+      - onFail: WARN
+      - dbms:
+          type: postgresql
+      - runningAs:
+          username: liquibase
   - changeSet:
-      id: create-base-demo-schema
-      author: Mahanov
-      preConditions:
-        - onFail: WARN
-        - sqlCheck:
-            expectedResult: 0
-            sql: SELECT count(sc.schema_name) FROM information_schema.schemata sc WHERE sc.schema_name = 'base_demo'
-      changes:
-        - sql:
-            sql: CREATE SCHEMA base_demo
-  - changeSet:
+      id: create-authority-table
+      author: Makhanov
+      comment: Создание таблицы прав
       preConditions:
         - onFail: WARN
         - not:
             - tableExists:
-
-#  - changeSet:
-#      id: create-user-table
-#      author: Mahanov
-#      preConditions:
-#        onFail: MARK_RAN
-#        not:
-#          tableExists:
-#            tableName: user
-#            schemaName: base_demo
-#      createTable:
-#        tableName: user
-#        schemaName: base_demo
-#        columns:
-#          - autoIncrement: true
-#            name: id
-#            type: BIGINT
-#            constraints:
-#              nullable: false
-#              primaryKey: true
-#              primaryKeyName: pk_user
-#          - name: username
-#            type: VARCHAR(255)
-#            constraints:
-#              nullable: false
-#              unique: true
+                tableName: authority
+                schemaName: base_demo
+      changes:
+        - createTable:
+            schemaName: base_demo
+            tableName: authority
+            remarks: Права
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_authority
+                    nullable: false
+                    unique: true
+              - column:
+                  name: authority_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createIndex:
+            schemaName: base_demo
+            tableName: authority
+            indexName: idx_authority_authority_code
+            columns:
+              - column:
+                  name: authority_code
+  - changeSet:
+      id: create-user-table
+      author: Makhanov
+      comment: Создание таблицы с пользователями
+      preConditions:
+        - onFail: WARN
+        - not:
+            - tableExists:
+                tableName: user
+                schemaName: base_demo
+      changes:
+        - createTable:
+            schemaName: base_demo
+            tableName: user
+            remarks: Пользователи
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: varchar(150)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createIndex:
+            schemaName: base_demo
+            tableName: user
+            indexName: idx_user_username
+            columns:
+              - column:
+                  name: username
+      rollback:
+        - dropTable:
+            schemaName: base_demo
+            tableName: user
+  - changeSet:
+      id: create-user-password-table
+      author: Makhanov
+      comment: Создание таблицы паролей пользователей
+      preConditions:
+        - not:
+            - tableExists:
+                tableName: user_password
+                schemaName: base_demo
+      changes:
+        - createTable:
+            schemaName: base_demo
+            tableName: user_password
+            remarks: Пароли пользователей
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user_password
+                    nullable: false
+                    unique: true
+              - column:
+                  name: id_user
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_user_password_user
+                    referencedColumnNames: id
+                    referencedTableName: user
+                    referencedTableSchemaName: base_demo
+  - changeSet:
+      id: create_user_authority_table
+      author: Makhanov
+      comment: Созадние таблицы прав пользователей
+      preConditions:
+        - onFail: WARN
+        - not:
+            - tableExists:
+                tableName: user_authority
+                schemaName: base_demo
+      changes:
+        - createTable:
+            schemaName: base_demo
+            tableName: user_authority
+            remarks: Права пользователей
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user_authority
+                    nullable: false
+                    unique: true
+              - column:
+                  name: id_user
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_authority_user
+                    referencedColumnNames: id
+                    referencedTableName: user
+                    referencedTableSchemaName: base_demo
+              - column:
+                  name: id_authority
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_authority_authority
+                    referencedColumnNames: id
+                    referencedTableName: authority
+                    referencedTableSchemaName: base_demo

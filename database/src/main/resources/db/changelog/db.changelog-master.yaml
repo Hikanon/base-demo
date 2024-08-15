@@ -1,4 +1,7 @@
 databaseChangeLog:
   - include:
       relativeToChangelogFile: true
+      file: pre_run.yaml
+  - include:
+      relativeToChangelogFile: true
       file: 0.0.1.yaml

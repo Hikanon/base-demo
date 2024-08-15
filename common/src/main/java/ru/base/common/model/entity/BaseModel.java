@@ -1,8 +1,11 @@
 package ru.base.common.model.entity;
 
+import jakarta.persistence.MappedSuperclass;
+
 import java.io.Serial;
 import java.io.Serializable;
 
+@MappedSuperclass
 public abstract class BaseModel implements Serializable {
 
     @Serial

@@ -1,5 +1,6 @@
 package ru.base.common.util;
 
+import ru.base.common.enumeration.Role;
 import ru.base.common.model.entity.BaseModel;
 import ru.base.common.model.entity.User;
 import ru.base.grpc.common.CommonMessage;
@@ -43,7 +44,7 @@ public class CommonBuilder {
                 .newBuilder()
                 .setUsername(buildUsername(user.getUsername()))
                 .setEmail(buildEmail(user.getEmail()))
-                .setRole(user.getRole().name())
+                .setRole(Role.ROLE_USER.name())
                 .build();
     }
 

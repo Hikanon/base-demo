@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,11 +18,11 @@ import java.util.Set;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "user", schema = "base_demo")
-public class User extends BaseModel implements Serializable {
+@Table(name = "authority", schema = "base_demo")
+public class Authority extends BaseModel implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -7435184469110412735L;
+    private static final long serialVersionUID = -648380546238475552L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,31 +31,23 @@ public class User extends BaseModel implements Serializable {
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "username", nullable = false, length = 50)
-    private String username;
+    @Column(name = "authority_code", nullable = false, length = 50)
+    private String authorityCode;
 
-    @Size(max = 150)
-    @NotNull
-    @Column(name = "email", nullable = false, length = 150)
-    private String email;
-
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "authority")
+    @ToString.Exclude
     private Set<UserAuthority> userAuthorities = new LinkedHashSet<>();
-
-    @OneToOne(mappedBy = "user")
-    private UserPassword password;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(userAuthorities, user.userAuthorities) && Objects.equals(password, user.password);
+        Authority authority = (Authority) o;
+        return Objects.equals(id, authority.id) && Objects.equals(authorityCode, authority.authorityCode) && Objects.equals(userAuthorities, authority.userAuthorities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, userAuthorities, password);
+        return Objects.hash(id, authorityCode, userAuthorities);
     }
-
 }

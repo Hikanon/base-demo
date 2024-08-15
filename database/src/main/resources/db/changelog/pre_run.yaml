@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-base-demo-schema
+      author: Makhanov
+      comment: Создание схемы для БД
+      preConditions:
+        - onFail: WARN
+        - onFailMessage: Схема base_demo уже существует
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT count(sc.schema_name) FROM information_schema.schemata sc WHERE sc.schema_name = 'base_demo'
+      changes:
+        - sql:
+            sql: CREATE SCHEMA base_demo
+      rollback:
+        - sql:
+            sql: DROP SCHEMA base_demo
+  - changeSet:
+      id: create-liquibase-user
+      author: Makhanov
+      comment: Создание пользователя Liquibase
+      preConditions:
+        - onFail: WARN
+        - onFailMessage: Пользователь liquibase уже существует
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(1) FROM pg_user WHERE usename = 'liquibase'
+      changes:
+        - sql:
+            sql: CREATE USER liquibase PASSWORD 'liquibase'
+      rollback:
+        - sql:
+            sql: DROP user liquibase
